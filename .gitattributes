@@ -1,0 +1,12 @@
+# Устанавливаем перевод строк LF для всех файлов
+* text=auto eol=lf
+
+# Принудительно для JS/TS/React файлов
+*.js  text eol=lf
+*.jsx text eol=lf
+*.ts  text eol=lf
+*.tsx text eol=lf
+*.json text eol=lf
+*.css text eol=lf
+*.html text eol=lf
+*.md  text eol=lf
