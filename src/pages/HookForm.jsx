@@ -1,7 +1,8 @@
 import { useForm } from 'react-hook-form'
 import { yupResolver } from '@hookform/resolvers/yup'
 import * as yup from 'yup'
-import { useEffect, useRef } from 'react'
+import { useEffect, useRef, useState } from 'react'
+import { registerUser } from '@/api/register'
 
 const schema = yup.object({
     email: yup.string().email('Некорректный email').required('Обязательное поле'),
@@ -17,16 +18,32 @@ export default function HookForm() {
         register,
         handleSubmit,
         formState: { errors, isValid },
+        getValues,
     } = useForm({ resolver: yupResolver(schema), mode: 'onChange' })
 
+    const [isSubmitting, setIsSubmitting] = useState(false)
     const buttonRef = useRef(null)
 
     useEffect(() => {
         if (isValid) buttonRef.current?.focus()
     }, [isValid])
 
-    const onSubmit = (data) => {
-        console.log(data)
+    const onSubmit = async (data) => {
+        setIsSubmitting(true)
+
+        try {
+            const result = await registerUser({
+                email: data.email,
+                password: data.password,
+            })
+
+            console.log('✅ Регистрация успешна:', result)
+            // Можно добавить очистку формы или редирект
+        } catch (err) {
+            console.error('❌ Ошибка регистрации:', err)
+        } finally {
+            setIsSubmitting(false)
+        }
     }
 
     return (
@@ -45,8 +62,12 @@ export default function HookForm() {
             <input type="password" {...register('confirm')} />
             {errors.confirm && <span className="error">{errors.confirm.message}</span>}
 
-            <button type="submit" disabled={!isValid} ref={buttonRef}>
-                Зарегистрироваться
+            <button
+                type="submit"
+                disabled={!isValid || isSubmitting}
+                ref={buttonRef}
+            >
+                {isSubmitting ? 'Отправка...' : 'Зарегистрироваться'}
             </button>
         </form>
     )
