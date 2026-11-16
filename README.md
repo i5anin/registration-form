@@ -1,5 +1,7 @@
 # React + Vite
 
+**ЦКП:** Учебная форма регистрации на React; состав проверок и готовность серверной регистрации требуют уточнения.
+
 This template provides a minimal setup to get React working in Vite with HMR and some ESLint rules.
 
 Currently, two official plugins are available:
